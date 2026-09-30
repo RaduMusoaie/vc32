@@ -8,9 +8,18 @@ project(vc32
 # C++
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 17)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+include(FetchContent)
 
+FetchContent_Declare(
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG v3.8.1
+)
+
+FetchContent_MakeAvailable(Catch2)
 
 # core lib
 
@@ -40,11 +49,11 @@ add_executable(cpu_tests
 
 target_link_libraries(cpu_tests
     PRIVATE
-        core)
+        core
+        Catch2::Catch2WithMain)
 
-add_test(
-    NAME cpu_tests
-    COMMAND cpu_tests
-)
+include(CTest)
+include(Catch)
 
+catch_discover_tests(cpu_tests)
 
